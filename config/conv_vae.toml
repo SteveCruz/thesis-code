@@ -1,0 +1,27 @@
+[dataset]
+name = "sviro_uncertainty" # specify which dataset to use: sviro, sviro_uncertainty, sviro_illumination, seats_and_people_nocar, mpi3d, visda_reduced
+factor = "sharan" # dataset variation to use: vehicle names for the sviro datasets, e.g. "kodiaq". not used by seats_and_people_nocar
+split = "train-adults-and-seats"
+nbr_of_samples_per_class = -1 # number of samples to keep for each class
+img_size = 128 # image size of the input and reconstruction
+
+[model]
+type = "conv_vae" # leave it like this
+metric = "" # use latent space constraint, leave "" to train normally. triplet, angular, npair, ntxent, contrastive
+dimension = 64 # latent space dimension
+activation = "ReLU" # SiLU, ELU, ReLU, GELU or any other PyTorch activation function
+dropout = 0.0 # rate at which neurons are being set to zero
+
+[training]
+gpu = "3" # which GPU to use during training
+batch_size = 64
+optimizer = "AdamW" # Adam, AdamW or SGD
+learning_rate = 0.001
+weight_decay = 0.3
+kl_weight = 1.0
+epochs = 1000
+frequency = 100 # how often to print results, check accuracy, reconstruct examples, save model
+loss = "MSE" # reconstruction loss: SSIM, BCE, MSE, L1
+make_scene_impossible = false # use partially impossible loss during training, reconstruction to same scene under different variation.
+make_instance_impossible = false # use partially impossible loss during training, reconstruction different class instance. if this is true, pirl_impossible is ignored
+augment = false # augment training data and hence train the autoencoder in a denoising fashion

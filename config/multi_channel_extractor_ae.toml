@@ -1,0 +1,29 @@
+[dataset]
+name = "synth_and_real_car" # specify which dataset to use: sviro, sviro_uncertainty, sviro_illumination, seats_and_people_nocar, mpi3d, visda_reduced
+factor = "" # dataset variation to use: vehicle names for the sviro datasets, e.g. "kodiaq". not used by seats_and_people_nocar
+split = "train"
+nbr_of_samples_per_class = -1# number of samples to keep for each class
+img_size = 128 # image size of the input and reconstruction
+
+[model]
+type = "multi_channel_extractor_ae" # leave it like this
+metric = "triplet" # use latent space constraint, leave "" to train normally. triplet, angular, npair, ntxent, contrastive
+dimension = 64 # latent space dimension
+activation = "ReLU" # SiLU, ELU, ReLU, GELU or any other PyTorch activation function
+dropout = 0.0 # rate at which neurons are being set to zero
+
+extractor = "vgg11" # densenet121, resnet50, vgg11: which pre-trained model to use for feature extraction
+layer = -3 # which layer from the pre-trained model to use to extract the features. our paper uses -3 only
+
+[training]
+gpu = "3" # which GPU to use during training
+batch_size = 64
+optimizer = "Adam" # Adam, AdamW or SGD
+learning_rate = 0.0001
+weight_decay = 0
+epochs = 1000
+frequency = 100 # how often to print results, check accuracy, reconstruct examples, save model
+loss = "Perceptual" # reconstruction loss: SSIM, BCE, MSE, L1
+make_scene_impossible = false # use partially impossible loss during training, reconstruction to same scene under different variation.
+make_instance_impossible = false # use partially impossible loss during training, reconstruction different class instance. if this is true, pirl_impossible is ignored
+augment = false # augment training data and hence train the autoencoder in a denoising fashion

@@ -1,0 +1,23 @@
+[dataset]
+name = "gtsrb" # specify which dataset to use: sviro, sviro_uncertainty, sviro_illumination, seats_and_people_nocar, mpi3d, visda_reduced
+factor = "" # dataset variation to use: vehicle names for the sviro datasets, e.g. "kodiaq". not used by seats_and_people_nocar
+split = "train"
+nbr_of_samples_per_class = 250 # number of samples to keep for each class
+img_size = 128 # image size of the input and reconstruction
+
+[model]
+type = "conv" # leave it like this
+activation = "ReLU" # SiLU, ELU, ReLU, GELU or any other PyTorch activation function
+dropout = 0.33 # rate at which neurons are being set to zero
+
+[training]
+gpu = "0" # which GPU to use during training
+batch_size = 64
+optimizer = "Adam" # Adam, AdamW or SGD
+learning_rate = 0.0001
+weight_decay = 0
+epochs = 1_000
+frequency = 100 # how often to print results, check accuracy, reconstruct examples, save model
+make_scene_impossible = false # use partially impossible loss during training, reconstruction to same scene under different variation.
+make_instance_impossible = false # use partially impossible loss during training, reconstruction different class instance. if this is true, pirl_impossible is ignored
+augment = false # augment training data and hence train the autoencoder in a denoising fashion
